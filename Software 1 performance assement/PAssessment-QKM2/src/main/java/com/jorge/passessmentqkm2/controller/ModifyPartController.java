@@ -42,6 +42,8 @@ public class ModifyPartController implements Initializable {
      */
     @FXML
     private RadioButton inHouseRadio;
+    @FXML
+    private RadioButton outSourcedRadio;
 
     /**
      * TextField for entering/displaying the data of the part.
@@ -76,7 +78,11 @@ public class ModifyPartController implements Initializable {
      * @param newPart The part to be selected.
      */
     public static void getPart(Part newPart){
-        selectedPart = newPart;
+        if(newPart instanceof InHouse){
+            selectedPart = (InHouse) newPart;
+        }else{
+            selectedPart = (Outsourced) newPart;
+        }
     }
 
     /**
@@ -156,6 +162,9 @@ public class ModifyPartController implements Initializable {
     @FXML
     void onInHouse(ActionEvent event) {
         sourceLbl.setText("Machine ID");
+        if(selectedPart instanceof Outsourced){
+            sourceTxt.clear();
+        }
     }
 
     /**
@@ -167,6 +176,11 @@ public class ModifyPartController implements Initializable {
     @FXML
     void onOutSorced(ActionEvent event) {
         sourceLbl.setText("Company Name");
+        if(selectedPart instanceof InHouse){
+            sourceTxt.clear();
+        }else{
+
+        }
     }
 
     /**
@@ -190,9 +204,12 @@ public class ModifyPartController implements Initializable {
         if(selectedPart instanceof InHouse){
             InHouse source = (InHouse) selectedPart;
             sourceTxt.setText(String.valueOf(((InHouse) selectedPart).getMachineId()));
+            inHouseRadio.setSelected(true);
+
         }else{
             Outsourced source = (Outsourced) selectedPart;
             sourceTxt.setText(String.valueOf(((Outsourced) selectedPart).getCompanyName()));
+            outSourcedRadio.setSelected(true);
         }
 
         System.out.println(getClass().getName() + "in initialized");

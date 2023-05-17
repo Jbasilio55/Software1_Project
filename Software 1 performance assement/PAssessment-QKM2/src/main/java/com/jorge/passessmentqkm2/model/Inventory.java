@@ -111,13 +111,28 @@ public class Inventory {
      * @param part the part to update
      */
     public static void updatePart(int index, Part part){
+        int id;
+        String name = part.getName();
+        double price = part.getPrice();
+        int stock = part.getStock();
+        int min = part.getMin();
+        int max = part.getMax();
+
         for(int i = 0; i < allParts.size(); i++){
             if(i == index){
-                allParts.get(i).setName(part.getName());
-                allParts.get(i).setPrice(part.getPrice());
-                allParts.get(i).setStock(part.getStock());
-                allParts.get(i).setMin(part.getMin());
-                allParts.get(i).setMax(part.getMax());
+                id = i;
+                allParts.get(i).setName(name);
+                allParts.get(i).setPrice(price);
+                allParts.get(i).setStock(stock);
+                allParts.get(i).setMin(min);
+                allParts.get(i).setMax(max);
+                Inventory.deletePart(Inventory.lookupPart(id));
+
+                if(part instanceof InHouse){
+                    Inventory.addPart(new InHouse(id, name, price, stock, min, max, ((InHouse) part).getMachineId()));
+                }else{
+                    Inventory.addPart(new Outsourced(id, name, price, stock, min, max, ((Outsourced) part).getCompanyName()));
+                }
             }
         }
     }
